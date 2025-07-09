@@ -35,7 +35,9 @@ public class Player extends Entity {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 4;
-        direction = "down";
+        direction = "";
+
+
     }
 
 
@@ -136,6 +138,8 @@ public class Player extends Entity {
                     image = right2;
                 }
                 break;
+            case "":
+                image = down1;
         }
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
