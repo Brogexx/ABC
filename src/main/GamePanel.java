@@ -1,5 +1,6 @@
 package main;
 
+import entity.Enemy;
 import entity.Player;
 import tile.TileManager;
 
@@ -34,6 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread ;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this,keyH);
+    public Enemy enemy = new Enemy(this,keyH,player);
 
 
     public GamePanel(){
@@ -103,6 +105,7 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
     public void update(){
 
         player.update();
+        enemy.update();
 
     }
     public void paintComponent(Graphics g){
@@ -115,6 +118,7 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
         tileM.draw(g2);//tileM muss über player stehen aufgrund der Layer
 
         player.draw(g2);
+        enemy.draw(g2);
 
         g2.dispose();
     }
