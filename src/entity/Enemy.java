@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Enemy extends Entity {
-    GamePanel gp;
+    GamePanel gp; // Zugriff auf Spielfeld-Informationen
     KeyHandler keyH;
 
     public int screenX = 0;
@@ -19,7 +19,7 @@ public class Enemy extends Entity {
     public int worldY2 = 0;
     private Player player;
 
-    int actionLockCounter = 119;
+    int actionLockCounter = 119; // Zähler, um die Bewegungsrichtung regelmäßig zu ändern
 
     public Enemy(GamePanel gp, KeyHandler keyH, Player player){
 
@@ -27,7 +27,7 @@ public class Enemy extends Entity {
         this.keyH = keyH;
         this.player = player;
 
-
+    // Kollisionserkennungsbereich definieren (Hitbox)
         solidArea = new Rectangle(8, 16, 32, 32); // Area in der der Spieler erkannt wird
 
 
@@ -35,7 +35,7 @@ public class Enemy extends Entity {
         getMonsterImage();
     }
     public void setDefaultValues (){
-
+    // Setzt die Anfangsposition in Weltkoordinaten
         worldX = 20 * gp.tileSize;
         worldY = 21 * gp.tileSize;
         speed = 4;
@@ -47,6 +47,7 @@ public class Enemy extends Entity {
 
     public void getMonsterImage(){
 
+        // Lädt die Bilder für jede Bewegungsrichtung (2 Frames pro Richtung)
         try{
             up1 = ImageIO.read(getClass().getResourceAsStream("/enemy/orc_up_1.png"));
             up2 = ImageIO.read(getClass().getResourceAsStream("/enemy/orc_up_2.png"));
@@ -63,7 +64,7 @@ public class Enemy extends Entity {
 
     public void move(){
         actionLockCounter++;
-
+        // Alle 120 Frames (ca. 2 Sekunden bei 60 FPS) neue Richtung wählen
         if(actionLockCounter == 120) {
 
             Random random = new Random();
@@ -93,9 +94,9 @@ public class Enemy extends Entity {
         move();
         //Check Tile Collision
         collisionOn = false;
-        worldX = 20 * gp.tileSize + screenX;
+        worldX = 20 * gp.tileSize + screenX; // Weltposition des Gegners neu berechnen
         worldY = 21 * gp.tileSize + screenY;
-        gp.cChecker.checkTile(this);
+        gp.cChecker.checkTile(this); // Prüfen, ob Bewegung zu Kollision führt
         System.out.println(collisionOn);
         // If Collision is false, Player can move
         if(collisionOn == false){
@@ -110,11 +111,11 @@ public class Enemy extends Entity {
                     break;
             }
         }
-
+        // Gegnerposition im Verhältnis zur Spielerposition
         worldX2 = 20 * gp.tileSize - gp.player.worldX + gp.player.screenX + screenX;
         worldY2 = 21 * gp.tileSize - gp.player.worldY + gp.player.screenY + screenY;
 
-
+        // Animation: Wechsel zwischen Sprite 1 und 2 alle 15 Frames
         spriteCounter++;
         if (spriteCounter > 15){
             if (spriteNum == 1){
@@ -133,6 +134,7 @@ public class Enemy extends Entity {
 //        g2.fillRect(x, y, gp.tileSize, gp.tileSize);
         BufferedImage image = null;
 
+        // Wählt basierend auf Richtung und Frame das passende Bild aus
         switch(direction){
             case "up":
                 if(spriteNum == 1) {

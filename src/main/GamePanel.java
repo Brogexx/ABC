@@ -41,12 +41,12 @@ public class GamePanel extends JPanel implements Runnable {
     public SuperObject obj[] = new SuperObject[10]; //bis zu 10 Objekte können erstellt werden im Spiel
 
 
-
+    //Konstruktor
     public GamePanel(){
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);//verhindert flackern
-        this.addKeyListener(keyH);//Tastatureingabe
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Panelgröße
+        this.setBackground(Color.BLACK); //Hintergrundfarbe
+        this.setDoubleBuffered(true); //verhindert flackern
+        this.addKeyListener(keyH); //Tastatureingabe
         this.setFocusable(true);
 
     }
@@ -79,44 +79,29 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
             lastTime = currentTime;
 
             if (delta >= 1) {
-                update();
-                repaint();
+                update(); //Spielzustand updaten
+                repaint(); // neu zeichnen
                 delta--;
                 drawCount++;
             }
 
             if(timer >= 1000000000){
-                System.out.println("FPS: " + drawCount);
+                System.out.println("FPS: " + drawCount); // Ausgabe FPS pro Sekunde
                 drawCount = 0;
                 timer = 0;
             }
-            //         Was passiert hier?
-//                    drawInterval ist die Zeit, die für ein Frame bei deiner Ziel-FPS vergehen soll (in Nanosekunden).
-//            Die Variable delta summiert, wie viele Frames seit dem letzten Update "angekommen" sind.
-//            while (gameThread != null) ist die Spielschleife, die immer weiterläuft, solange der Thread lebt.
-//                    Innerhalb der Schleife:
-//            Berechne, wie viel Zeit seit dem letzten Loop vergangen ist (currentTime - lastTime).
-//                    Addiere das Verhältnis zur erwarteten Framezeit (drawInterval) auf delta.
-//            Wenn delta >= 1, ist genug Zeit vergangen, um ein Frame zu zeichnen.
-//            Dann wird:
-//            update() aufgerufen (Spielzustand aktualisieren, z.B. Positionen, Logik)
-//            repaint() aufgerufen (zeichnet das Spiel neu)
-//            delta um 1 verringert (ein Frame wurde bearbeitet)
-//            drawCount erhöht (Zähler für Frames in dieser Sekunde)
-//            Alle 1 Sekunde (timer >= 1.000.000.000 ns) wird die aktuelle FPS ausgegeben (drawCount), und die Zähler werden zurückgesetzt.
-//
-
 
         }
     }
 
-
+//Spiellogik aktualisieren
     public void update(){
 
         player.update();
         enemy.update();
 
     }
+    //Zeichnen aller Spielfunktionen
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);
@@ -124,7 +109,7 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
         Graphics2D g2 = (Graphics2D)g;
 
 
-        //Tile
+        //Tile (Hintergrund)
         tileM.draw(g2);//tileM muss über player stehen aufgrund der Layer
 
         //Objekt
@@ -134,13 +119,11 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
             }
 
         }
-
-
         //Player
         player.draw(g2);
         enemy.draw(g2);
 
-        g2.dispose();
+        g2.dispose(); //Freigabe der Ressourcen
     }
 
 }

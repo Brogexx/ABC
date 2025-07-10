@@ -6,16 +6,19 @@ public class CollisionChecker {
     GamePanel gp;
 
     public CollisionChecker(GamePanel gp) {
-        this.gp = gp;
+        this.gp = gp; // Zugriff auf Spielfeld, Tiles usw.
     }
 
     public void checkTile(Entity entity) {
+
+        // Berechnet die Grenzen (Hitbox) der Entity in Weltkoordinaten
 
         int entityLeftWorldX = entity.worldX + entity.solidArea.x;
         int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
         int entityTopWorldY = entity.worldY + entity.solidArea.y;
         int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height + 5;
 
+        // Umrechnen der Weltkoordinaten in Tile-Indizes
         int entityLeftCol = entityLeftWorldX / gp.tileSize;
         int entityRightCol = entityRightWorldX / gp.tileSize;
         int entityTopRow = entityTopWorldY / gp.tileSize;
@@ -23,6 +26,7 @@ public class CollisionChecker {
 
         int tileNum1, tileNum2;
 
+        // Prüfen der Kollision anhand der Bewegungsrichtung
         switch (entity.direction) {
             case "up":
                 entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize;
