@@ -2,6 +2,7 @@ package main;
 
 import entity.Enemy;
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.JPanel;
@@ -34,8 +35,11 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH= new KeyHandler();
     Thread gameThread ;
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this,keyH);
     public Enemy enemy = new Enemy(this,keyH,player);
+    public SuperObject obj[] = new SuperObject[10]; //bis zu 10 Objekte können erstellt werden im Spiel
+
 
 
     public GamePanel(){
@@ -45,6 +49,11 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);//Tastatureingabe
         this.setFocusable(true);
 
+    }
+
+    public void setupGame(){
+
+        aSetter.setObject();
     }
 
 public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft und das Programm nicht einfriertSo (Update + Rendern)
@@ -115,8 +124,19 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
         Graphics2D g2 = (Graphics2D)g;
 
 
+        //Tile
         tileM.draw(g2);//tileM muss über player stehen aufgrund der Layer
 
+        //Objekt
+        for (int i = 0; i < obj.length; i++) {
+            if(obj[i] != null){
+                obj[i].draw(g2, this);
+            }
+
+        }
+
+
+        //Player
         player.draw(g2);
         enemy.draw(g2);
 
