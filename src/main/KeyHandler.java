@@ -5,10 +5,11 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
+    //Zur Verfolgung der gedrückten Tasten
     public boolean upPressed, downPressed, leftPressed, rightPressed;
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e) { // Wird bei Eingabe eines "Zeichens" aufgerufen (z.B. Buchstabe, Zahl)
 
     }
 

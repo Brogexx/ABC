@@ -18,6 +18,8 @@ public class main {
         window.setLocationRelativeTo(null); // zentriert das Fenster
         window.setVisible(true); // Sichtbarkeit
 
-        gamePanel.startGameThread(); //startet den Spiel-Loop
+
+        gamePanel.startGameThread();//startet den Spiel-Loop
+        gamePanel.setupGame();//Objekte werden generiert
     }
 }

@@ -3,6 +3,7 @@ package main;
 import ai.PathFinder;
 import entity.Enemy;
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.JPanel;
@@ -35,18 +36,26 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH= new KeyHandler();
     Thread gameThread ;
     public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this,keyH);
     public Enemy enemy = new Enemy(this,keyH,player);
+    public SuperObject obj[] = new SuperObject[10]; //bis zu 10 Objekte können erstellt werden im Spiel
     public PathFinder pFinder = new PathFinder(this);
 
 
+    //Konstruktor
     public GamePanel(){
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);//verhindert flackern
-        this.addKeyListener(keyH);//Tastatureingabe
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // Panelgröße
+        this.setBackground(Color.BLACK); //Hintergrundfarbe
+        this.setDoubleBuffered(true); //verhindert flackern
+        this.addKeyListener(keyH); //Tastatureingabe
         this.setFocusable(true);
 
+    }
+
+    public void setupGame(){
+
+        aSetter.setObject();
     }
 
 public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft und das Programm nicht einfriertSo (Update + Rendern)
@@ -72,14 +81,14 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
             lastTime = currentTime;
 
             if (delta >= 1) {
-                update();
-                repaint();
+                update(); //Spielzustand updaten
+                repaint(); // neu zeichnen
                 delta--;
                 drawCount++;
             }
 
             if(timer >= 1000000000){
-                System.out.println("FPS: " + drawCount);
+                System.out.println("FPS: " + drawCount); // Ausgabe FPS pro Sekunde
                 drawCount = 0;
                 timer = 0;
             }
@@ -103,13 +112,14 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
         }
     }
 
-
+//Spiellogik aktualisieren
     public void update(){
 
         player.update();
         enemy.update();
 
     }
+    //Zeichnen aller Spielfunktionen
     public void paintComponent(Graphics g){
 
         super.paintComponent(g);
@@ -117,12 +127,21 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
         Graphics2D g2 = (Graphics2D)g;
 
 
+        //Tile (Hintergrund)
         tileM.draw(g2);//tileM muss über player stehen aufgrund der Layer
 
+        //Objekt
+        for (int i = 0; i < obj.length; i++) {
+            if(obj[i] != null){
+                obj[i].draw(g2, this);
+            }
+
+        }
+        //Player
         player.draw(g2);
         enemy.draw(g2);
 
-        g2.dispose();
+        g2.dispose(); //Freigabe der Ressourcen
     }
 
 }
