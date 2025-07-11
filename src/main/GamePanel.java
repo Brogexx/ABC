@@ -1,5 +1,6 @@
 package main;
 
+import ai.PathFinder;
 import entity.Enemy;
 import entity.Player;
 import tile.TileManager;
@@ -30,12 +31,13 @@ public class GamePanel extends JPanel implements Runnable {
     //FPS(wie oft pro Sekunde das Spiel aktualisiert und neu gezeichnet wird)
     int FPS = 60;
 
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     KeyHandler keyH= new KeyHandler();
     Thread gameThread ;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this,keyH);
     public Enemy enemy = new Enemy(this,keyH,player);
+    public PathFinder pFinder = new PathFinder(this);
 
 
     public GamePanel(){

@@ -19,7 +19,6 @@ public class Enemy extends Entity {
     public int worldY2 = 0;
     private Player player;
 
-    int actionLockCounter = 119;
 
     public Enemy(GamePanel gp, KeyHandler keyH, Player player){
 
@@ -38,7 +37,7 @@ public class Enemy extends Entity {
 
         worldX = 20 * gp.tileSize;
         worldY = 21 * gp.tileSize;
-        speed = 4;
+        speed = 2;
         direction = "";
 
 
@@ -62,29 +61,85 @@ public class Enemy extends Entity {
     }
 
     public void move(){
-        actionLockCounter++;
+        int goalCol = (player.worldX+player.solidArea.x)/ gp.tileSize;
+        int goalRow = (player.worldY+player.solidArea.y)/ gp.tileSize;
 
-        if(actionLockCounter == 120) {
+        searchPath(goalCol,goalRow);
 
-            Random random = new Random();
-            int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
 
-            if(i <= 25) {
+    }
+
+    public void searchPath(int goalCol, int goalRow){
+
+        int startCol = (worldX + solidArea.x)/gp.tileSize;
+        int startRow = (worldY+ solidArea.y)/gp.tileSize;
+
+        gp.pFinder.setNodes(startCol,startRow, goalCol, goalRow);
+        System.out.println(gp.pFinder.search());
+        if(gp.pFinder.search() == true) {
+
+            int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
+            int nextY = gp.pFinder.pathList.get(0).row * gp.tileSize;
+
+            int enLeftX = worldX + solidArea.x;
+            int enRightX = worldX + solidArea.x + solidArea.width;
+            int enTopY = worldY + solidArea.y;
+            int enBottomY = worldY + solidArea.y + solidArea.height;
+
+            if(enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize){
                 direction = "up";
             }
-            if(i > 25 && i <= 50) {
+            else if(enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize){
                 direction = "down";
             }
-            if(i > 50 && i <= 75) {
-                direction = "left";
+            else if(enTopY >= nextY && enBottomY < nextY + gp.tileSize){
+
+                if(enLeftX > nextX){
+                    direction = "left";
+                }
+                if(enLeftX < nextX){
+                    direction = "right";
+                }
             }
-            if(i > 75 && i <= 100) {
-                direction = "right";
+            else if (enTopY > nextY && enLeftX > nextX) {
+
+                direction = "up";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "left";
+                }
+            } else if (enTopY > nextY && enLeftX < nextX) {
+
+                direction = "up";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "right";
+                }
+
+            }
+            else if (enTopY < nextY && enLeftX > nextX) {
+                direction = "down";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "left";
+                }
             }
 
-            actionLockCounter = 0;
+            else if (enTopY < nextY && enLeftX < nextX) {
+                direction = "down";
+                checkCollision();
+                if(collisionOn) {
+                    direction = "right";
+                }
+            }
         }
+    }
 
+    public void checkCollision() {
+        collisionOn = false;
+        worldX = 20 * gp.tileSize + screenX;
+        worldY = 21 * gp.tileSize + screenY;
+        gp.cChecker.checkTile(this);
     }
 
 
@@ -92,11 +147,7 @@ public class Enemy extends Entity {
 
         move();
         //Check Tile Collision
-        collisionOn = false;
-        worldX = 20 * gp.tileSize + screenX;
-        worldY = 21 * gp.tileSize + screenY;
-        gp.cChecker.checkTile(this);
-        System.out.println(collisionOn);
+        checkCollision();
         // If Collision is false, Player can move
         if(collisionOn == false){
             switch (direction){
