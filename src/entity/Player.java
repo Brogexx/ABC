@@ -15,6 +15,10 @@ public class Player extends Entity {
 
     public final int screenX; //Position des Spielers bleibt gleich verändert sich nicht, nur der Background verändert sich
     public final int screenY;
+    public int solidAreaX = 8;
+    public int solidAreaY = 16;
+
+    public int score;
 
     public Player(GamePanel gp, KeyHandler keyH){
 
@@ -24,8 +28,9 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2); //halbiert den Hintergrund und den Spieler Tile , um die Mitte des Spiels zu haben
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
-        solidArea = new Rectangle(8, 16, 32, 32); // Area in der der Spieler erkannt wird
-
+        solidArea = new Rectangle(solidAreaX, solidAreaY, 32, 32); // Area in der der Spieler erkannt wird
+        solidAreaDefaultX = solidAreaX;
+        solidAreaDefaultY = solidAreaY;
 
         setDefaultValues();
         getPlayerImage();
@@ -36,6 +41,7 @@ public class Player extends Entity {
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "";
+        score = 0;
 
 
     }
@@ -73,6 +79,13 @@ public class Player extends Entity {
         collisionOn = false;
         gp.cChecker.checkTile(this);
 
+        //Check Object Collision
+        int objIndex = gp.cChecker.checkObject(this, true);
+        pickUpObject(objIndex);
+
+        //Check Enemy Collision
+        gp.cChecker.checkEnemy(this);
+
         // If Collision is false, Player can move
         if(collisionOn == false){
             switch (direction){
@@ -95,6 +108,17 @@ public class Player extends Entity {
                 spriteNum = 1;
             }
             spriteCounter = 0;
+        }
+    }
+
+    public void pickUpObject(int i) {
+        if(i != -1) {
+            score++;
+            gp.obj[i] = null;
+        }
+
+        if(score == 7) {
+            gp.gameState = gp.endState;
         }
     }
 

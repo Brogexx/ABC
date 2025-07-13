@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     public TileManager tileM = new TileManager(this);
-    KeyHandler keyH= new KeyHandler();
+    KeyHandler keyH= new KeyHandler(this);
     Thread gameThread ;
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
@@ -41,6 +41,13 @@ public class GamePanel extends JPanel implements Runnable {
     public Enemy enemy = new Enemy(this,keyH,player);
     public SuperObject obj[] = new SuperObject[10]; //bis zu 10 Objekte können erstellt werden im Spiel
     public PathFinder pFinder = new PathFinder(this);
+    public UI ui = new UI(this);
+
+    //Game State
+    public int gameState;
+    public final int startState = 1;
+    public final int playState = 2;
+    public final int endState = 3;
 
 
     //Konstruktor
@@ -55,7 +62,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame(){
 
-        aSetter.setObject();
+        aSetter.setObjects();
+        gameState = startState;
     }
 
 public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft und das Programm nicht einfriertSo (Update + Rendern)
@@ -114,9 +122,20 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
 
 //Spiellogik aktualisieren
     public void update(){
+        if (gameState == startState) {
+            aSetter.resetObjects();
+            aSetter.setObjects();
+            player.setDefaultValues();
+            enemy.setDefaultValues();
+        }
+        if (gameState == playState){
+            player.update();
+            enemy.update();
+        }
+        if (gameState == endState){
+            //Do Nothing
+        }
 
-        player.update();
-        enemy.update();
 
     }
     //Zeichnen aller Spielfunktionen
@@ -140,6 +159,8 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
         //Player
         player.draw(g2);
         enemy.draw(g2);
+        ui.draw(g2);
+
 
         g2.dispose(); //Freigabe der Ressourcen
     }

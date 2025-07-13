@@ -5,8 +5,14 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
+    GamePanel gp;
+
     //Zur Verfolgung der gedrückten Tasten
     public boolean upPressed, downPressed, leftPressed, rightPressed;
+
+    public KeyHandler(GamePanel gp) {
+        this.gp = gp;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) { // Wird bei Eingabe eines "Zeichens" aufgerufen (z.B. Buchstabe, Zahl)
@@ -32,7 +38,15 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_D){
             rightPressed = true;
+        }
+        if(code == KeyEvent.VK_SPACE){
+            if(gp.gameState == gp.startState) {
+                gp.gameState = gp.playState;
+            }
 
+            if(gp.gameState == gp.endState) {
+                gp.gameState = gp.startState;
+            }
         }
 
     }

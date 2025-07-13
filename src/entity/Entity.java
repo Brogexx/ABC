@@ -22,6 +22,7 @@ public class Entity {
 
     // Rechteck zur Kollisionserkennung (Hitbox)
     public Rectangle solidArea;
+    public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
 
 }

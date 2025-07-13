@@ -17,6 +17,8 @@ public class Enemy extends Entity {
     public int screenY = 0;
     public int worldX2 = 0;
     public int worldY2 = 0;
+    public int solidAreaX = 8;
+    public int solidAreaY = 16;
     private Player player;
 
 
@@ -27,18 +29,23 @@ public class Enemy extends Entity {
         this.player = player;
 
     // Kollisionserkennungsbereich definieren (Hitbox)
-        solidArea = new Rectangle(8, 16, 32, 32); // Area in der der Spieler erkannt wird
-
+        solidArea = new Rectangle(solidAreaX, solidAreaY, 32, 32); // Area in der der Spieler erkannt wird
+        solidAreaDefaultX = solidAreaX;
+        solidAreaDefaultY = solidAreaY;
 
         setDefaultValues();
         getMonsterImage();
     }
     public void setDefaultValues (){
     // Setzt die Anfangsposition in Weltkoordinaten
-        worldX = 20 * gp.tileSize;
-        worldY = 21 * gp.tileSize;
+        worldX = 23 * gp.tileSize;
+        worldY = 14 * gp.tileSize;
         speed = 2;
         direction = "";
+        screenX = 0;
+        screenY = 0;
+        worldX2 = 23 * gp.tileSize - gp.player.worldX + gp.player.screenX + screenX;
+        worldY2 = 14 * gp.tileSize - gp.player.worldY + gp.player.screenY + screenY;
 
 
     }
@@ -76,7 +83,6 @@ public class Enemy extends Entity {
         int startRow = (worldY+ solidArea.y)/gp.tileSize;
 
         gp.pFinder.setNodes(startCol,startRow, goalCol, goalRow);
-        System.out.println(gp.pFinder.search());
         if(gp.pFinder.search() == true) {
 
             int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
@@ -139,8 +145,8 @@ public class Enemy extends Entity {
 
     public void checkCollision() {
         collisionOn = false;
-        worldX = 20 * gp.tileSize + screenX;
-        worldY = 21 * gp.tileSize + screenY;
+        worldX = 23 * gp.tileSize + screenX;
+        worldY = 14 * gp.tileSize + screenY;
         gp.cChecker.checkTile(this);
     }
 
@@ -164,8 +170,8 @@ public class Enemy extends Entity {
             }
         }
         // Gegnerposition im Verhältnis zur Spielerposition
-        worldX2 = 20 * gp.tileSize - gp.player.worldX + gp.player.screenX + screenX;
-        worldY2 = 21 * gp.tileSize - gp.player.worldY + gp.player.screenY + screenY;
+        worldX2 = 23 * gp.tileSize - gp.player.worldX + gp.player.screenX + screenX;
+        worldY2 = 14 * gp.tileSize - gp.player.worldY + gp.player.screenY + screenY;
 
         // Animation: Wechsel zwischen Sprite 1 und 2 alle 15 Frames
         spriteCounter++;

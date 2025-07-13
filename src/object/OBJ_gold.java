@@ -8,7 +8,7 @@ public class OBJ_gold extends SuperObject{
 
             name = "Gold";
             try{
-                image = ImageIO.read(getClass().getResourceAsStream("(objects/gold.png"));
+                image = ImageIO.read(getClass().getResourceAsStream("/objects/gold.png"));
 
 
             }catch(IOException e){
