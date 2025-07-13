@@ -42,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
     public SuperObject obj[] = new SuperObject[10]; //bis zu 10 Objekte können erstellt werden im Spiel
     public PathFinder pFinder = new PathFinder(this);
     public UI ui = new UI(this);
+    Sound sound = new Sound();
 
     //Game State
     public int gameState;
@@ -64,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         aSetter.setObjects();
         gameState = startState;
+        playMusic(0);
     }
 
 public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft und das Programm nicht einfriertSo (Update + Rendern)
@@ -132,9 +134,6 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
             player.update();
             enemy.update();
         }
-        if (gameState == endState){
-            //Do Nothing
-        }
 
 
     }
@@ -163,6 +162,23 @@ public void startGameThread(){//damit das Spiel neben dem Hauptprogramm läuft u
 
 
         g2.dispose(); //Freigabe der Ressourcen
+    }
+
+    public void playMusic(int i) {
+
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void endMusic() {
+
+        sound.stop();
+    }
+
+    public void playSound(int i) {
+        sound.setFile(i);
+        sound.play();
     }
 
 }

@@ -87,6 +87,7 @@ public class CollisionChecker {
                         if(entity.solidArea.intersects(gp.obj[i].solidArea)) {
                             if(player) {
                                 index = i;
+                                gp.playSound(1);
                             }
                         }
                         break;
@@ -95,6 +96,7 @@ public class CollisionChecker {
                         if(entity.solidArea.intersects(gp.obj[i].solidArea)) {
                             if(player) {
                                 index = i;
+                                gp.playSound(1);
                             }
                         }
                         break;
@@ -103,6 +105,7 @@ public class CollisionChecker {
                         if(entity.solidArea.intersects(gp.obj[i].solidArea)) {
                             if(player) {
                                 index = i;
+                                gp.playSound(1);
                             }
                         }
                         break;
@@ -111,6 +114,7 @@ public class CollisionChecker {
                         if(entity.solidArea.intersects(gp.obj[i].solidArea)) {
                             if(player) {
                                 index = i;
+                                gp.playSound(1);
                             }
                         }
                         break;
@@ -136,6 +140,7 @@ public class CollisionChecker {
 
 
                 if(entity.solidArea.intersects(gp.enemy.solidArea)) {
+                    gp.playSound(2);
                     gp.gameState = gp.endState;
                 }
 

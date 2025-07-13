@@ -118,6 +118,7 @@ public class Player extends Entity {
         }
 
         if(score == 7) {
+            gp.playSound(3);
             gp.gameState = gp.endState;
         }
     }
