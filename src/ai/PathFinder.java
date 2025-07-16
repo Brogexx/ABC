@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class PathFinder {
     GamePanel gp;
-    Node[][] node;
+    Node[][] nodes;
     ArrayList<Node> openList = new ArrayList<>();
     public ArrayList<Node> pathList = new ArrayList<>();
     Node startNode, goalNode, currentNode;
@@ -19,13 +19,13 @@ public class PathFinder {
     }
 
     public void instantiateNodes() {
-        node = new Node[gp.maxWorldCol][gp.maxWorldRow];
+        nodes = new Node[gp.maxWorldCol][gp.maxWorldRow];
 
         int col = 0;
         int row = 0;
 
         while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
-            node[col][row] = new Node(col, row);
+            nodes[col][row] = new Node(col, row);
 
             col++;
             if(col == gp.maxWorldCol) {
@@ -39,9 +39,9 @@ public class PathFinder {
         int col = 0;
         int row = 0;
         while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
-            node[col][row].open = false;
-            node[col][row].checked = false;
-            node[col][row].solid = false;
+            nodes[col][row].open = false;
+            nodes[col][row].checked = false;
+            nodes[col][row].solid = false;
 
             col++;
             if(col == gp.maxWorldCol) {
@@ -59,9 +59,9 @@ public class PathFinder {
 
         resetNodes();
 
-        startNode = node[startCol][startRow];
+        startNode = nodes[startCol][startRow];
         currentNode = startNode;
-        goalNode = node[goalCol][goalRow];
+        goalNode = nodes[goalCol][goalRow];
         openList.add(currentNode);
 
         int col = 0;
@@ -71,10 +71,10 @@ public class PathFinder {
 
             int tileNum = gp.tileM.mapTileNum[col][row];
             if(gp.tileM.tile[tileNum].collision) {
-                node[col][row].solid = true;
+                nodes[col][row].solid = true;
             }
 
-            getCost(node[col][row]);
+            getCost(nodes[col][row]);
 
             col++;
             if(col == gp.maxWorldCol) {
@@ -94,7 +94,7 @@ public class PathFinder {
         yDistance = Math.abs(node.row - goalNode.row);
         node.hCost = xDistance + yDistance;
 
-        node.fCost = node.gCost + yDistance;
+        node.fCost = node.gCost + node.hCost;
     }
     public boolean search() {
         while (!goalReached && step < 500) {
@@ -105,17 +105,17 @@ public class PathFinder {
             openList.remove(currentNode);
 
             if (row - 1 >= 0) {
-                openNode(node[col][row - 1]);
+                openNode(nodes[col][row - 1]);
             }
             if (col - 1 >= 0) {
-                openNode(node[col - 1][row]);
+                openNode(nodes[col - 1][row]);
             }
 
             if (row + 1 < gp.maxWorldRow) {
-                openNode(node[col][row + 1]);
+                openNode(nodes[col][row + 1]);
             }
             if (col + 1 < gp.maxWorldCol) {
-                openNode(node[col + 1][row]);
+                openNode(nodes[col + 1][row]);
             }
 
             int bestNodeIndex = 0;
